@@ -1,0 +1,80 @@
+Build a web app using the following project description.
+1. Platform:
+a web app. This approach ensures that it remains client-side and doesn’t need a backend unless you want to save user designs or provide other online functionalities.
+
+2. UI/UX:
+Have an intuitive user interface:
+
+    Canvas Area: Central area where users can draw and design their templates.
+    Shape Tools: Side menu with options such as rectangles, circles, ellipses, straight lines, curves, and custom shapes.
+    Zoom and Pan: To allow detailed work on designs.
+    Grid System: Helps users align and measure accurately.
+
+3. Core Features:
+
+    Shape Creation: Users should be able to select a tool, click and drag to create a shape, and modify it.
+    Curve Customization: Provide Bezier handles or similar functionality to modify curves to the desired shape.
+    Measurement Tools: A ruler or similar interface element, along with options to input exact dimensions.
+    Multiple Page Indicator: If a design spans more than one page, have dashed lines or markers indicating where pages should be joined.
+    Export/Print: Option to export the design as a PDF or directly print. Ensure correct scaling, so measurements stay accurate when printed.
+
+4. Technical Implementation:
+
+    Frontend: You can use web technologies like HTML, CSS, and JavaScript. Libraries like paper.js or fabric.js are powerful for drawing and handling graphics on the web.
+    Responsive Design: Ensure the app works on both mobile and desktop. Use responsive frameworks like Bootstrap or Materialize.
+    Exporting: To generate PDFs, you can use JavaScript libraries such as jsPDF.
+
+5. Accuracy and Calibration:
+
+    Scaling: It's crucial that when a design is printed, it remains true to scale. Embed a calibration feature where users can print a test ruler or shape to check if it measures correctly with physical tools.
+    Units: Allow users to switch between metric and imperial units.
+
+6. Testing:
+
+    Usability Testing: Ensure that your target audience can intuitively use the app.
+    Printing Tests: Regularly print designs to ensure accuracy. Test on different printers and paper sizes.
+
+7. Optional Features:
+
+    Template Library: Include a library of common woodworking or leatherworking patterns.
+    Save and Load: While you want it to stay client-side, consider using the browser's local storage to let users save and load designs without needing an online account.
+
+8. Launch & Feedback:
+
+    Beta Testing: Release a beta version to a group of woodworkers or leatherworkers. Gather feedback and iterate.
+    Continuous Improvements: Post-launch, continue collecting user feedback, and regularly update the app with improvements and new features.
+    1. Stitch/Punch Indication Feature:
+
+    Tool Selection: Add a 'Stitch/Punch' tool in the tool palette. Once selected, the user can choose between different types of stitch patterns or punch indications.
+
+    Auto-Generate Along Edges: When the user selects a shape or a line, provide an option to "Add Stitches/Punches". Once clicked, the app should automatically space and place stitch or punch markers along the chosen edge.
+
+    Custom Spacing: Allow users to specify the distance between stitch points or punches, accommodating various stitch styles and tools.
+
+2. Customizable Patterns:
+
+    Pattern Library: Provide a set of predefined stitch/punch patterns that users can choose from. These can be simple dots for stitches or more complex patterns indicating specific leatherworking tools.
+
+    Custom Pattern Creation: Advanced users may wish to create their own stitch or punch patterns. Allow for a custom pattern creation tool where users can design a small segment of a pattern, which can then be repeated along the selected edges.
+
+3. Edge Detection:
+
+If users are drawing custom shapes or combining multiple shapes, the app should provide intelligent edge detection. This will help in accurately placing stitch/punch patterns without overlap or under-utilization.
+
+    You can leverage libraries and algorithms that cater to edge detection to facilitate this.
+
+4. Visual Indicators & Details:
+
+    Hover Preview: Before finalizing the placement of stitches/punches, give a preview of how it'll look when the user hovers over the option.
+
+    Custom Colors: Allow users to change the color of stitch/punch markers for better visibility against certain template colors.
+
+    Measurement Indicators: Next to the stitch or punch markers, optionally display the distance to the next point. This will help users when manually sewing or punching, ensuring even spacing.
+
+5. Tutorials & Guidance:
+
+Given that this feature adds complexity to the app, consider integrating tutorials or step-by-step guides. A quick walkthrough can show users how to effectively use the stitch/punch tool, ensuring they get the most out of your app.
+
+6. Feedback Loop:
+
+Especially for this feature, gather feedback from actual leatherworkers. They'll provide insights into common stitching/punching patterns, distances, and preferences, helping refine this tool to be as useful as possible.
