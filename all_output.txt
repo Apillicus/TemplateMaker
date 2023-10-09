@@ -1,6 +1,5 @@
 To implement the requested functionality, we will need to create several JavaScript modules, each responsible for a specific feature (zooming, panning, grid drawing, shape drawing, pattern application, etc.). We will also need to create event handlers to manage user interactions, extend the canvas initialization to handle window resizes, build out the exporting functionality, add actual test cases in Jest test suites, and add more advanced error handling and UI feedback.
 
-Let's start with the entry point file:
 
 src/index.js
 ```javascript
@@ -14,8 +13,6 @@ window.onload = function() {
 ```
 
 This file imports the necessary modules and initializes the canvas and event handlers when the window loads.
-
-Next, we'll define the canvas initialization and handling of window resizes:
 
 src/canvas.js
 ```javascript
@@ -37,8 +34,6 @@ export function initCanvas() {
 
 This file exports a function that initializes the canvas and sets up an event listener to handle window resizes.
 
-Next, we'll define the event handlers:
-
 src/eventHandlers.js
 ```javascript
 import { zoom, pan } from './zoomAndPan.js';
@@ -56,8 +51,6 @@ export function handleUserInteractions() {
 
 This file imports the necessary functions from other modules and sets up event listeners for user interactions.
 
-Next, we'll define the zooming and panning functionality:
-
 src/zoomAndPan.js
 ```javascript
 export function zoom(event) {
@@ -70,8 +63,6 @@ export function pan(event) {
 ```
 
 This file exports functions for zooming and panning.
-
-Next, we'll define the drawing functionality:
 
 src/drawing.js
 ```javascript
@@ -90,8 +81,6 @@ export function applyPattern(ctx, pattern) {
 
 This file exports functions for drawing a grid, shapes, and applying patterns.
 
-Next, we'll define the exporting functionality:
-
 src/export.js
 ```javascript
 export function exportDesign(ctx) {
@@ -100,8 +89,6 @@ export function exportDesign(ctx) {
 ```
 
 This file exports a function for exporting the design.
-
-Finally, we'll define the Jest test suites:
 
 __tests__/canvas.test.js
 ```javascript
@@ -168,5 +155,3 @@ package.json
   }
 }
 ```
-
-This concludes a fully working implementation.
