@@ -1,0 +1,19 @@
+body {
+    display: flex;
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#sidebar {
+    width: 20%;
+    height: 100%;
+    padding: 1em;
+    box-sizing: border-box;
+    background-color: #f0f0f0;
+}
+
+#canvas {
+    width: 80%;
+    height: 100%;
+}

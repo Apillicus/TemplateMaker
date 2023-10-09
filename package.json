@@ -1,0 +1,13 @@
+{
+  "name": "template-maker",
+  "version": "1.0.0",
+  "description": "A canvas-based template making tool",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "jest": "^26.6.3"
+  }
+}
