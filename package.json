@@ -6,8 +6,8 @@
   "scripts": {
     "test": "jest"
   },
-  "dependencies": {},
   "devDependencies": {
+    "bootstrap": "^5.0.1",
     "jest": "^26.6.3"
   }
 }
