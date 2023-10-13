@@ -1,147 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Template Generator App</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    height: 100vh;
-    background-color: #f4f4f4; <!--  Light grey background for a cleaner look -->
-  }
-  .sidebar {
-    width: 200px;
-    background: #ffffff; <!--  Changed to white -->
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    border-right: 1px solid #d3d3d3; <!--  Light grey border -->
-  }
-  .top-right {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    color: #333; <!--  Dark grey for better readability -->
-  }
-  .settings {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    text-align: center;
-  }
-  button {
-    padding: 10px; <!--  More padding for a better visual space -->
-    margin-bottom: 5px;
-    cursor: pointer;
-    background-color: #e7e7e7; <!--  Light grey for neutrality -->
-    border: 1px solid #d3d3d3; <!--  Consistent with the sidebar border -->
-    color: #333; <!--  Dark grey color for contrast and better readability -->
-  }
-  button:hover {
-    background-color: #d3d3d3; <!--  Slightly darker grey on hover for interactive feedback -->
-  }
-  <!--  Additional styles for dropdown and other elements can be added here. Not sure what at this time, and will require user feedback -->
-</style>
-
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Generator App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .sidebar {
+            width: 200px;
+            background: #ffffff;
+            padding: 10px;
+            border-right: 1px solid #d3d3d3;
+        }
+        .sidebar-header {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .top-right {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            color: #333;
+        }
+        .main-content {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        button {
+            padding: 10px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            background-color: #e7e7e7;
+            border: 1px solid #d3d3d3;
+            color: #333;
+            display: block;
+            width: calc(100% - 20px); /* Adjusting width considering padding */
+        }
+        button:hover {
+            background-color: #d3d3d3;
+        }
+        select, input[type="number"] {
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 5px; /* added space after inputs */
+            width: calc(100% - 20px); /* Adjusting width to match button width */
+            box-sizing: border-box; /* Include padding and border in element's total width and height */
+        }
+        label {
+            margin-top: 10px;
+            display: block;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                order: -1;
+            }
+            .top-right {
+                position: static;
+                padding: 10px;
+            }
+            body {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
 
-
 <div class="sidebar">
-  <!--  I need to consider having the categories set as a drop-down menu. -->
-  <!-- Category: Template Management -->
-  <div class="sidebar-category">
-    <div class="sidebar-header">Template Management</div>
-    <button id="newTemplate" title="Create a new template">New Template</button>
-    <button id="saveTemplate" title="Save the current template">Save Template</button>
-    <button id="loadTemplate" title="Load an existing template">Load Template</button>
-    <button id="exportToPDF" title="Export the current template to PDF">Export to PDF</button>
-  </div>
+    <!-- Sidebar content: categories and buttons -->
+    <!-- Implement functionality for creating a new template. -->
+    <!-- Implement functionality for saving the current template. -->
+    <!-- Implement functionality for loading an existing template. -->
+    <!-- Implement functionality for exporting the current template to PDF. -->
 
-  <!-- Category: Design Tools -->
-  <div class="sidebar-category">
-    <div class="sidebar-header">Design Tools</div>
-    <button id="drawShapeBtn" title="Open the shape drawing tool">Draw Shape</button>
-    <button id="applyPatternsBtn" title="Apply selected patterns to the template">Apply Patterns</button>
-    <button id="enableSnapToGridBtn" title="Enable the snap-to-grid functionality">Enable Snap to Grid</button>
-    <button id="exportDesignBtn" title="Export your current design">Export Design</button>
-  </div>
-<!--  -->
-  <!-- Category: Advanced Tools -->
-  <div class="sidebar-category">
-    <div class="sidebar-header">Advanced Tools</div>
-    <button id="stitchSelect" title="Select various stitch and punch patterns">Stitch Select</button>
-    <button id="pointSelect" title="Select points on a line for the stitch to follow">Point Select</button>
-    <button id="addJoiningMarks" title="Adds marks to indicate where printed pages are to be joined">Add Joining Marks</button>
+    <div class="sidebar-category">
+        <div class="sidebar-header" aria-label="Template management section">Template Management</div>
+        <button type="button" id="newTemplate" title="Create a new template">New Template</button>
+        <button type="button" id="saveTemplate" title="Save the current template">Save Template</button>
+        <button type="button" id="loadTemplate" title="Load an existing template">Load Template</button>
+        <button type="button" id="exportToPDF" title="Export the current template to PDF">Export to PDF</button>
+    </div>
 
-  </div>
+    <div class="sidebar-category">
+    <!-- Implement functionality for drawing shapes on the template. -->
+    <!-- Implement functionality for applying selected patterns to the template. -->
+    <!-- Implement functionality for enabling snap-to-grid functionality. -->
+    <!-- Implement functionality for exporting the current design. -->
 
-  <!-- Miscellaneous -->
-  <div class="sidebar-category">
-    <div class="sidebar-header">Miscellaneous</div>
-    <button id="startTutorial" title="Tutorial of basic functions">Tutorial</button>
-  </div>
+        <div class="sidebar-header" aria-label="Design tools section">Design Tools</div>
+        <button type="button" id="drawShapeBtn" title="Open the shape drawing tool">Draw Shape</button>
+        <button type="button" id="applyPatternsBtn" title="Apply selected patterns to the template">Apply Patterns</button>
+        <button type="button" id="enableSnapToGridBtn" title="Enable the snap-to-grid functionality">Enable Snap to Grid</button>
+        <button type="button" id="exportDesignBtn" title="Export your current design">Export Design</button>
+    </div>
 
+    <div class="sidebar-category">
+    <!-- Implement functionality for selecting various stitch and punch patterns. -->
+    <!-- Implement functionality for selecting points on a line for the stitch to follow. -->
+    <!-- Implement functionality for adding marks to indicate where printed pages should be joined. -->
+
+        <div the sidebar-header" aria-label="Advanced tools section">Advanced Tools</div>
+        <button type="button" id="stitchSelect" title="Select various stitch and punch patterns">Stitch Select</button>
+        <button type="button" id="pointSelect" title="Select points on a line for the stitch to follow">Point Select</button>
+        <button type="button" id="addJoiningMarks" title="Adds marks to indicate where printed pages are to be joined">Add Joining Marks</button>
+    </div>
+
+    <div class="sidebar-category">
+    <!-- Implement functionality for starting a tutorial of basic functions. -->
+
+            <div class="sidebar-header" aria-label="Miscellaneous section">Miscellaneous</div>
+        <button type="button" id="startTutorial" title="Tutorial of basic functions">Tutorial</button>
+    </div>
+
+    <div class="sidebar-category">
+    <!-- Implement functionality for choosing measurement units. -->
+    <!-- Implement functionality for inputting and setting the dimensions. -->
+        <label for="units">Choose units:</label>
+        <select id="units" aria-label="Unit selection">
+            <option value="inches">Inches</option>
+            <option value="centimeters">Centimeters</option>
+        </select>
+
+        <label for="width">Width:</label>
+        <input type="number" id="width" placeholder="Width" aria-label="Width input">
+
+        <label for="height">Height:</label>
+        <input type="number" id="height" placeholder="Height" aria-label="Height input">
+    </div>
 </div>
 
 <div class="top-right">
-  <h1>Template Generator</h1>
-</div>
-<!--  The stitch and point select buttons are formatting into rows. Additional CSS needed to correct this, and the subsequent width change. Button width set to 50% -->
-<style>
-  /* ... existing styles ... */
+    <h1>Template Generator</h1>
+    <!-- Potential place for user account information or additional navigation links. -->
 
-  /* Specific style to ensure buttons take full width and display in a column */
-  #stitchSelect,
-  #pointSelect,
-  #addJoiningMarks,
-  #startTutorial,
-  #exportDesignBtn,
-  #enableSnapToGridBtn,
-  #applyPatternsBtn,
-  #drawShapeBtn,
-  #exportToPDF,
-  #loadTemplate,
-  #saveTemplate,
-  #newTemplate {
-    display: block; /* Ensures the element fills the line */
-    width: 70%; /* Optional: makes the button's width as wide as its container */
-  }
-</style>
+</div>
 
 <div class="main-content">
-  <!-- Main content -->
-  <div class="settings">
-    <h2>Settings:</h2>
-    <!-- Settings content -->
-    <label for="units">Choose units:</label>
-    <select id="units">
-      <option value="inches">Inches</option>
-      <option value="centimeters">Centimeters</option>
-      <!-- Add more units as needed -->
-    </select>
-
-    <!-- Additional settings -->
-
-    <label for="dimensions">Dimensions:</label>
-    <input type="number" id="width" placeholder="Width">
-    <input type="number" id="height" placeholder="Height">
-
-    <button id="calibrate">Calibrate</button>
-    
-    
-    <!-- Add more settings as needed -->
-  </div>
-  <!-- Other content... -->
+    <!-- Main working area - possibly a canvas or interactive area for template design. -->
+    <!-- Implement main app functionality here. This could include rendering the current template, tools for modifying the template, etc. -->
+    <!-- Other content... -->
+    <!-- ERROR HANDLING: Implement catch mechanisms for errors during operations like loading, saving, and rendering templates. Display user-friendly error messages. -->
+    <!-- LOADING STATES: Implement visual feedback for loading states, indicating to the user that an operation (like saving or loading a template) is in progress. -->
+    <!-- SUCCESS/FAILURE MESSAGES: Implement feedback messages for user actions. Indicate whether an operation like saving a template or exporting a design was successful or failed. -->
 </div>
+<!-- Place for importing or writing custom JavaScript functionalities. -->
+<!-- Implement event listeners for user interactions. -->
+<!-- Implement API calls for operations like saving, loading, and exporting templates. -->
+<!-- Implement data manipulation functions for operations like drawing shapes or applying patterns. -->
+<!-- Implement rendering functions for displaying templates, designs, or user feedback messages. -->
+<script src="path/to/external/javascript/file.js"></script>
 
-<!-- JavaScript functions... -->
 </body>
 </html>

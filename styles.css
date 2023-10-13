@@ -54,6 +54,11 @@ body {
 .dropdown:hover .dropdown-content {
   display: block;
 }
+    /* Style for the hover effect */
+    .dropdown-content a:hover {
+      background-color: #ddd; 
+      color: black; /* Change text color on hover if needed */
+  }
 
 .top-right, .settings {
   position: relative;
