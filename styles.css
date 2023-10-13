@@ -96,7 +96,15 @@ button:hover {
   display: block;
   width: 70%;
 }
+.sidebar .dropdown .dropbtn {
+  width: 100%; /* Set button width relative to the parent */
+  box-sizing: border-box; /* Ensures padding is included in the total width/height */
+}
 
+.top-right {
+  text-align: right; /* Aligns the content to the right */
+  padding: 10px; /* Add some space around the title */
+}
 .main-content {
   flex-grow: 1;
   padding: 10px;
