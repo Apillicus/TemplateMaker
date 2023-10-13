@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Template Generator App</title>
+<link rel="stylesheet" href="styles.css">
+<script src="main.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="dropdown">
+            <button class="dropbtn">Template Management</button>
+            <div class="dropdown-content">
+                <a id="newTemplate" title="Create a new template">New Template</a>
+                <a id="saveTemplate" title="Save the current template">Save Template</a>
+                <a id="loadTemplate" title="Load an existing template">Load Template</a>
+                <a id="exportToPDF" title="Export the current template to PDF">Export to PDF</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropbtn">Design Tools</button>
+            <div class="dropdown-content">
+                <a id="drawShapeBtn" title="Open the shape drawing tool">Draw Shape</a>
+                <a id="applyPatternsBtn" title="Apply selected patterns to the template">Apply Patterns</a>
+                <a id="enableSnapToGridBtn" title="Enable the snap-to-grid functionality">Enable Snap to Grid</a>
+                <a id="exportDesignBtn" title="Export your current design">Export Design</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropbtn">Advanced Tools</button>
+            <div class="dropdown-content">
+                <a id="stitchSelect" title="Select various stitch and punch patterns">Stitch Select</a>
+                <a id="pointSelect" title="Select points on a line for the stitch to follow">Point Select</a>
+                <a id="addJoiningMarks" title="Adds marks to indicate where printed pages are to be joined">Add Joining Marks</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropbtn">Miscellaneous</button>
+            <div class="dropdown-content">
+                <a id="startTutorial" title="Tutorial of basic functions">Tutorial</a>
+                <a id="reset" title="Reset all changes and start afresh">Reset</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="top-right">
+        <h1>Template Generator</h1>
+    </div>
+
+    <div class="main-content">
+        <div class="settings">
+            <h2>Settings:</h2>
+            <label for="units">Choose units:</label>
+            <select id="units">
+                <option value="inches">Inches</option>
+                <option value="centimeters">Centimeters</option>
+            </select>
+
+            <label for="dimensions">Dimensions:</label>
+            <input type="number" id="width" placeholder="Width" min="1">
+            <input type="number" id="height" placeholder="Height" min="1">
+
+            <button id="calibrate">Calibrate</button>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+
+## Usage
+
+Here is a brief overview of the functions provided by the Template class:
+
+- `save(name, details)`: Save the current template with the given name and details.
+- `load(id)`: Load a previously saved template by its ID.
+- `exportToPDF(includeInstructions, includeNotes)`: Export the current template to a PDF file. You can choose to include instructions and notes.
+- `drawShape(shape, dimensions)`: Draw a shape on the template with the given dimensions.
+- `applyPattern(pattern)`: Apply a pattern to the template.
+- `enableSnapToGrid(gridSize)`: Enable snap to grid with the given grid size.
+- `exportDesign(includeMaterials, includeTools, includeCutList)`: Export the current design. You can choose to include materials, tools, and a cut list.
+- `addStitchPunchPatterns(pattern)`: Add a stitch punch pattern to the template.
+- `selectPointCutPath(points)`: Select a point cut path for the template.
+- `addJoiningMarks(marks)`: Add joining marks to the template.
+- `estimateMaterials()`: Estimate the materials needed for the template.
+- `selectTools(tools)`: Select the tools needed for the template.
+- `preview()`: Preview the current template.
+- `share(users)`: Share the current template with other users.
+- `customizeWorkspace(settings)`: Customize the workspace settings for the template.
+- `provideFeedback(feedback)`: Provide feedback about the application.
+
+## Packaging for Deployment
+
+For packaging this application for deployment, you can use a tool like [pkg](https://www.npmjs.com/package/pkg). This tool allows you to package your Node.js project into an executable that can be run even on machines without Node.js installed.
+
+To install pkg, run:
+
