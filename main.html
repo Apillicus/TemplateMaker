@@ -8,6 +8,29 @@
 <script src="main.js"></script>
 </head>
 <body>
+
+<!-- The form is hidden initially -->
+<form id="templateCreationForm" style="display: none;">
+    <label for="templateName">Template Name:</label>
+    <input type="text" id="templateName" name="templateName" required>
+
+    <label for="templateWidth">Width:</label>
+    <input type="number" id="templateWidth" name="templateWidth" required min="1">
+
+    <label for="templateHeight">Height:</label>
+    <input type="number" id="templateHeight" name="templateHeight" required min="1">
+
+    <label for="measurementUnit">Measurement Unit:</label>
+    <select id="measurementUnit" name="measurementUnit" required>
+        <option value="inches">inches</option>
+        <option value="cm">cm</option>
+        <!-- Add any other units you support -->
+    </select>
+
+    <input type="submit" value="Submit">
+</form>
+
+
     <div class="sidebar">
         <div class="dropdown">
             <button class="dropbtn">Template Management</button>
