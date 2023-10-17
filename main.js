@@ -1,71 +1,26 @@
-import { Template } from './template.js';
+const fs = require('fs');
+const PDFDocument = require('pdfkit');
 
-export class DesignManager {
-  constructor(dimensions, units) {
-    this.dimensions = dimensions;
-    this.units = units;
-    this.shapes = [];
-    this.patterns = [];
-    this.gridSize = 0;
-    this.tools = [];
-    this.settings = {};
-    this.instructions = '';
-    this.notes = '';
-    this.materials = {};
-    this.cutList = [];
-    this.name = '';
-    this.actions = [];
-    this.undoneActions = [];
+  save(name, details) {
+    fs.writeFileSync(`./templates/${name}.json`, JSON.stringify({ ...details, shapes: this.shapes, patterns: this.patterns, gridSize: this.gridSize, tools: this.tools, settings: this.settings, units: this.units, dimensions: this.dimensions, materials: this.materials, cutList: this.cutList, joiningMarks: this.joiningMarks, instructions: this.instructions, notes: this.notes }));
   }
 
-  undoAction() {
-    if (this.actions.length > 0) {
-      const lastAction = this.actions.pop();
-      lastAction.undo();
-      this.undoneActions.push(lastAction);
-    }
+  static load(id) {
+    const data = fs.readFileSync(`./templates/${id}.json`);
+    return new Template(JSON.parse(data));
   }
 
-  redoAction() {
-    if (this.undoneActions.length > 0) {
-      const lastUndoneAction = this.undoneActions.pop();
-      lastUndoneAction.redo();
-      this.actions.push(lastUndoneAction);
-    }
-  }
-
-  importDesign(filePath) {
-    // Pseudo-code, this heavily depends on your application's infrastructure
-    const fileContents = fs.readFileSync(filePath, 'utf8');
-    const importedDesign = JSON.parse(fileContents);
-    this.shapes = importedDesign.shapes;
-    this.patterns = importedDesign.patterns;
-    this.gridSize = importedDesign.gridSize;
-    this.tools = importedDesign.tools;
-    this.settings = importedDesign.settings;
-    this.instructions = importedDesign.instructions;
-    this.notes = importedDesign.notes;
-    this.materials = importedDesign.materials;
-    this.cutList = importedDesign.cutList;
-    this.name = importedDesign.name;
-  }
-
-  adjustColorScheme(colorScheme) {
-    // Pseudo-code, this heavily depends on your application's infrastructure
-    this.settings.colorScheme = colorScheme;
-  }
-
-  reset() {
-    this.shapes = [];
-    this.patterns = [];
-    this.gridSize = 0;
-    this.tools = [];
-    this.settings = {};
-    this.instructions = '';
-    this.notes = '';
-    this.materials = {};
-    this.cutList = [];
-    this.name = '';
+  exportToPDF(includeInstructions, includeNotes) {
+    const doc = new PDFDocument();
+    doc.pipe(fs.createWriteStream(`./exports/${this.name}.pdf`));
+    this.shapes.forEach(shape => shape.draw(doc));
+    if (includeInstructions) doc.text(this.instructions);
+    if (includeNotes) doc.text(this.notes);
+    doc.text(`Dimensions: ${this.dimensions.width} x ${this.dimensions.height} ${this.units}`);
+    doc.text(`Materials: ${JSON.stringify(this.materials)}`);
+    doc.text(`Cut List: ${JSON.stringify(this.cutList)}`);
+    doc.text(`Joining Marks: ${JSON.stringify(this.joiningMarks)}`);
+    doc.end();
   }
 
   drawShape(shape, dimensions) {
@@ -78,6 +33,14 @@ export class DesignManager {
 
   enableSnapToGrid(gridSize) {
     this.gridSize = gridSize;
+  }
+
+  exportDesign(includeMaterials, includeTools, includeCutList) {
+    const design = { shapes: this.shapes, patterns: this.patterns, units: this.units, dimensions: this.dimensions, gridSize: this.gridSize, settings: this.settings, joiningMarks: this.joiningMarks, instructions: this.instructions, notes: this.notes };
+    if (includeMaterials) design.materials = this.materials;
+    if (includeTools) design.tools = this.tools;
+    if (includeCutList) design.cutList = this.cutList;
+    fs.writeFileSync(`./exports/${this.name}.json`, JSON.stringify(design));
   }
 
   addStitchPunchPatterns(pattern) {
@@ -116,6 +79,7 @@ export class DesignManager {
     // Here's a pseudo-implementation
     console.log("Rendering a preview of the shapes and patterns...");
   }
+  
 
   share(users) {
     // Pseudo-code, this heavily depends on your application's infrastructure
@@ -124,30 +88,55 @@ export class DesignManager {
       // Add database entry, send emails, or other sharing logic...
     });
   }
+  
 
   customizeWorkspace(settings) {
     this.settings = settings;
   }
+
+  provideFeedback(feedback) {
+    fs.writeFileSync(`./feedback/${Date.now()}.txt`, feedback);
+  }
+
 }
+
+module.exports = Template;
 
 // This part of the code deals with UI interactions and uses the Template class
 document.addEventListener('DOMContentLoaded', (event) => {
-  // Removed require statement 
+  const Template = require('./template'); 
  
   let template; 
 
-  document.getElementById('newTemplate').addEventListener('click', function() {
-    const dimensions = {width: document.getElementById('width').value, height: document.getElementById('height').value};
-    const units = document.getElementById('units').value;
-    template = newTemplate(dimensions, units); // create a new template when the button is clicked
+  document.getElementById('templateCreationForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const name = document.getElementById('templateName').value;
+    const dimensions = {width: document.getElementById('templateWidth').value, height: document.getElementById('templateHeight').value};
+    const units = document.getElementById('measurementUnit').value;
+    template = newTemplate(name, dimensions, units); // create a new template when the form is submitted
   });
 
 
 // Function to create a new template
-export function newTemplate(dimensions, units) {
-  let template = new Template(dimensions, units);
+function newTemplate(name, dimensions, units) {
+  let template = new Template(name, dimensions, units);
   return template;
 }
+document.getElementById('units').addEventListener('change', function() {
+  const units = this.value;
+  template.units = units;
+});
+
+document.getElementById('width').addEventListener('input', function() {
+  const width = this.value;
+  template.dimensions.width = width;
+});
+
+document.getElementById('height').addEventListener('input', function() {
+  const height = this.value;
+  template.dimensions.height = height;
+});
+
 document.getElementById('newTemplate').addEventListener('click', function() {
   const dimensions = {width: document.getElementById('width').value, height: document.getElementById('height').value};
   const units = document.getElementById('units').value;
@@ -155,7 +144,7 @@ document.getElementById('newTemplate').addEventListener('click', function() {
 });
 
 // Function to start an interactive tutorial
-export function startTutorial() {
+function startTutorial() {
   let step = 0;
   const steps = [
     {selector: '#newTemplate', message: 'Click here to create a new template.'},
@@ -165,9 +154,12 @@ export function startTutorial() {
     // ... other steps for other elements ...
   ];
 
-  const tutorialModal = document.createElement('div');
-  tutorialModal.className = 'tutorial-modal';
-  document.body.appendChild(tutorialModal);
+  let tutorialModal = document.querySelector('.tutorial-modal');
+  if (!tutorialModal) {
+    tutorialModal = document.createElement('div');
+    tutorialModal.className = 'tutorial-modal';
+    document.body.appendChild(tutorialModal);
+  }
 
   function showStep() {
     const currentStep = steps[step];
@@ -197,49 +189,43 @@ document.getElementById('startTutorial').addEventListener('click', function() {
   startTutorial();
 });
 
-document.getElementById('undoAction').addEventListener('click', function() {
-  undoAction();
-});
-
-document.getElementById('redoAction').addEventListener('click', function() {
-  redoAction();
-});
-
-document.getElementById('importDesign').addEventListener('click', function() {
-  const filePath = prompt("Please enter the file path of the design to import:");
-  importDesign(filePath);
-});
-
-document.getElementById('adjustColorScheme').addEventListener('click', function() {
-  const colorScheme = prompt("Please enter the new color scheme:");
-  adjustColorScheme(colorScheme);
-});
-
 document.getElementById('calibrate').addEventListener('click', function() {
-  calibrate();
+  const calibrationSquare = { shape: 'square', dimensions: { width: 1, height: 1 }, position: { x: 0, y: 0 } };
+  template.shapes.push(calibrationSquare);
+  const measuredSize = prompt('Please print, measure the size of the printed square in inches, and enter the size here:');
+  const scale = 1 / measuredSize;
+  template.shapes.forEach(shape => {
+    shape.dimensions.width *= scale;
+    shape.dimensions.height *= scale;
+  });
+  alert('The scale of the template has been adjusted based on the measured size of the calibration square.');
 });
 
-// Function to add calibration square
-export function calibrate() {
-  // Assuming 'template' is a global or otherwise accessible variable
+// Function to add calibration square and adjust scale
+function calibrate(template) {
   const calibrationSquare = { shape: 'square', dimensions: { width: 1, height: 1 }, position: { x: 0, y: 0 } }; // Positioned outside the normal template area
   template.shapes.push(calibrationSquare);
-  alert('A 1-inch calibration square has been added outside your template area. Please print and measure to ensure correct sizing.');
+  const measuredSize = prompt('A 1-inch calibration square has been added outside your template area. Please print, measure the size of the printed square in inches, and enter the size here:');
+  const scale = 1 / measuredSize;
+  template.shapes.forEach(shape => {
+    shape.dimensions.width *= scale;
+    shape.dimensions.height *= scale;
+  });
+  alert('The scale of the template has been adjusted based on the measured size of the calibration square.');
 }
 
 // Function to save a template
-export function saveTemplate(template, name, details) {
-  template.save(name, details);
-}
-
 document.getElementById('saveTemplate').addEventListener('click', function() {
   const name = prompt("Please enter a name for your template:");
   const details = {}; // Collect any necessary details from the user or the application
-  saveTemplate(template, name, details); // Assuming 'template' is accessible from this scope
+  const dimensions = {width: document.getElementById('width').value, height: document.getElementById('height').value};
+  const units = document.getElementById('units').value;
+  let template = newTemplate(dimensions, units);
+  template.save(name, details);
 });
 
 // Function to load a template
-export function loadTemplate(id) {
+function loadTemplate(id) {
   let template = Template.load(id);
   return template;
 }
@@ -250,49 +236,52 @@ document.getElementById('loadTemplate').addEventListener('click', function() {
 });
 
 // Function to export a template to PDF
-export function exportToPDF(template, includeInstructions, includeNotes) {
+function exportToPDF(template, includeInstructions, includeNotes) {
   template.exportToPDF(includeInstructions, includeNotes);
 }
 
 document.getElementById('exportToPDF').addEventListener('click', function() {
   const includeInstructions = confirm("Include instructions in the PDF?");
   const includeNotes = confirm("Include notes in the PDF?");
-  exportToPDF(template, includeInstructions, includeNotes); // Assuming 'template' is accessible from this scope
+  const dimensions = {width: document.getElementById('width').value, height: document.getElementById('height').value};
+  const units = document.getElementById('units').value;
+  let template = newTemplate(dimensions, units);
+  exportToPDF(template, includeInstructions, includeNotes);
 });
 
 // Function to draw a shape
-export function drawShape(template, shape, dimensions) {
+function drawShape(template, shape, dimensions) {
   template.drawShape(shape, dimensions);
 }
 
 document.getElementById('drawShapeBtn').addEventListener('click', function() {
   const shape = prompt("Please enter the type of shape (e.g., 'circle', 'rectangle'):");
   const dimensions = {width: prompt("Enter shape width:"), height: prompt("Enter shape height:")};
-  drawShape(template, shape, dimensions); // Assuming 'template' is accessible from this scope
+  const templateDimensions = {width: document.getElementById('width').value, height: document.getElementById('height').value};
+  const units = document.getElementById('units').value;
+  let template = newTemplate(templateDimensions, units);
+  drawShape(template, shape, dimensions);
 });
 
 // Function to apply patterns
-export function applyPatterns(template, pattern) {
+function applyPatterns(template, pattern) {
   template.applyPattern(pattern);
 }
 
 // Function to enable snap to grid
-export function enableSnapToGrid(template, gridSize) {
+function enableSnapToGrid(template, gridSize) {
   template.enableSnapToGrid(gridSize);
 }
 
 // Function to export design
-export function exportDesign(template, includeMaterials, includeTools, includeCutList) {
+function exportDesign(template, includeMaterials, includeTools, includeCutList) {
   template.exportDesign(includeMaterials, includeTools, includeCutList);
 }
 
-// Function to reset all changes
-export function reset(template) {
-  template.reset();
-}
+// Removed function reset as it is not defined in the Template class
 
 // Function to add stitch/punch patterns
-export function addStitchPunchPatterns(template, pattern) {
+function addStitchPunchPatterns(template, pattern) {
   template.addStitchPunchPatterns(pattern);
 }
 
@@ -303,7 +292,7 @@ export function addStitchPunchPatterns(template, pattern) {
   });
 
 // Function to select point/cut path
-export function selectPointCutPath(template, points) {
+function selectPointCutPath(template, points) {
   template.selectPointCutPath(points);
 }
 
@@ -314,57 +303,57 @@ export function selectPointCutPath(template, points) {
   });
 
 // Function to add joining marks
-export function addJoiningMarks(template, marks) {
+function addJoiningMarks(template, marks) {
   template.addJoiningMarks(marks);
 }
 
 // Function to estimate materials
-export function estimateMaterials(template) {
+function estimateMaterials(template) {
   return template.estimateMaterials();
 }
 
 // Function to select tools
-export function selectTools(template, tools) {
+function selectTools(template, tools) {
   template.selectTools(tools);
 }
 
 // Function to preview
-export function preview(template) {
+function preview(template) {
   template.preview();
 }
 
 // Function to share
-export function share(template, users) {
+function share(template, users) {
   template.share(users);
 }
 
 // Function to customize workspace
-export function customizeWorkspace(template, settings) {
+function customizeWorkspace(template, settings) {
   template.customizeWorkspace(settings);
 }
 
-// Function to undo action
-export function undoAction() {
-  template.undoAction();
-}
-
-// Function to redo action
-export function redoAction() {
-  template.redoAction();
-}
-
-// Function to import design
-export function importDesign(filePath) {
-  template.importDesign(filePath);
-}
-
-// Function to adjust color scheme
-export function adjustColorScheme(colorScheme) {
-  template.adjustColorScheme(colorScheme);
-}
-
 // Function to provide feedback/support
-export function provideFeedback(template, feedback) {
+function provideFeedback(template, feedback) {
   template.provideFeedback(feedback);
-}}
-// Removed module.exports statemen
+}
+
+module.exports = {
+  newTemplate,
+  startTutorial,
+  saveTemplate,
+  loadTemplate,
+  exportToPDF,
+  drawShape,
+  applyPatterns,
+  enableSnapToGrid,
+  exportDesign,
+  addStitchPunchPatterns,
+  selectPointCutPath,
+  addJoiningMarks,
+  estimateMaterials,
+  selectTools,
+  preview,
+  share,
+  customizeWorkspace,
+  provideFeedback
+};
