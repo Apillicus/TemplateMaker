@@ -2,18 +2,8 @@ const fs = require('fs');
 const PDFDocument = require('pdfkit');
 
 class Template {
-  constructor(dimensions, units) {
-    this.dimensions = dimensions;
-    this.units = units;
-    this.shapes = [];
-    this.patterns = [];
-    this.gridSize = 0;
-    this.tools = [];
-    this.settings = {};
-  }
-
   save(name, details) {
-    fs.writeFileSync(`./templates/${name}.json`, JSON.stringify({ ...details, shapes: this.shapes, patterns: this.patterns, gridSize: this.gridSize, tools: this.tools, settings: this.settings }));
+    fs.writeFileSync(`./templates/${name}.json`, JSON.stringify({ ...details, shapes: this.shapes, patterns: this.patterns, gridSize: this.gridSize, tools: this.tools, settings: this.settings, units: this.units, dimensions: this.dimensions, materials: this.materials, cutList: this.cutList, joiningMarks: this.joiningMarks, instructions: this.instructions, notes: this.notes }));
   }
 
   static load(id) {
@@ -27,6 +17,10 @@ class Template {
     this.shapes.forEach(shape => shape.draw(doc));
     if (includeInstructions) doc.text(this.instructions);
     if (includeNotes) doc.text(this.notes);
+    doc.text(`Dimensions: ${this.dimensions.width} x ${this.dimensions.height} ${this.units}`);
+    doc.text(`Materials: ${JSON.stringify(this.materials)}`);
+    doc.text(`Cut List: ${JSON.stringify(this.cutList)}`);
+    doc.text(`Joining Marks: ${JSON.stringify(this.joiningMarks)}`);
     doc.end();
   }
 
@@ -43,7 +37,7 @@ class Template {
   }
 
   exportDesign(includeMaterials, includeTools, includeCutList) {
-    const design = { shapes: this.shapes, patterns: this.patterns };
+    const design = { shapes: this.shapes, patterns: this.patterns, units: this.units, dimensions: this.dimensions, gridSize: this.gridSize, settings: this.settings, joiningMarks: this.joiningMarks, instructions: this.instructions, notes: this.notes };
     if (includeMaterials) design.materials = this.materials;
     if (includeTools) design.tools = this.tools;
     if (includeCutList) design.cutList = this.cutList;
@@ -63,7 +57,18 @@ class Template {
   }
 
   estimateMaterials() {
-    // Implement estimate materials functionality
+    // Simple example: summing the areas of the shapes
+    const totalArea = this.shapes.reduce((sum, { shape, dimensions }) => {
+      // Example: Assuming the shape is a rectangle
+      if (shape === 'rectangle') {
+        return sum + dimensions.width * dimensions.height;
+      }
+      // Other shape calculations...
+      return sum;
+    }, 0);
+  
+    // Assuming a simple material estimation based on total area
+    this.materials = { 'totalArea': totalArea };
   }
 
   selectTools(tools) {
@@ -71,12 +76,20 @@ class Template {
   }
 
   preview() {
-    // Implement preview functionality
+    // This method would typically be implemented on the client-side
+    // Here's a pseudo-implementation
+    console.log("Rendering a preview of the shapes and patterns...");
   }
+  
 
   share(users) {
-    // Implement share functionality
+    // Pseudo-code, this heavily depends on your application's infrastructure
+    users.forEach(user => {
+      console.log(`Sharing design with ${user}...`);
+      // Add database entry, send emails, or other sharing logic...
+    });
   }
+  
 
   customizeWorkspace(settings) {
     this.settings = settings;
@@ -85,7 +98,6 @@ class Template {
   provideFeedback(feedback) {
     fs.writeFileSync(`./feedback/${Date.now()}.txt`, feedback);
   }
-
 }
 
 module.exports = Template;
