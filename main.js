@@ -1,5 +1,5 @@
 //it says that require is not defined. 
-const Template = require('./template');
+// Removed unnecessary require statement
 const fs = require('fs');
 const PDFDocument = require('pdfkit');
 
@@ -113,7 +113,7 @@ module.exports = Template;
 
 // This part of the code deals with UI interactions and uses the Template class
 document.addEventListener('DOMContentLoaded', (event) => {
-  const Template = require('./template'); 
+  // Removed unnecessary require statement 
  
     let template; });
 
