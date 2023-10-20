@@ -1,7 +1,6 @@
 //it says that require is not defined. 
 // Removed unnecessary require statement
-const fs = require('fs');
-const PDFDocument = require('pdfkit');
+// Removed require statements
 
 class Template {
   // Constructor for the Template class
@@ -17,23 +16,29 @@ class Template {
 
   // Method to save the template
   save(name, details) {
-    fs.writeFileSync(`./templates/${name}.json`, JSON.stringify({ ...details, shapes: this.shapes, patterns: this.patterns, gridSize: this.gridSize, tools: this.tools, settings: this.settings }));
+    // Use the download attribute of the anchor element to save files
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([JSON.stringify({ ...details, shapes: this.shapes, patterns: this.patterns, gridSize: this.gridSize, tools: this.tools, settings: this.settings })], {type: 'application/json'}));
+    a.download = `${name}.json`;
+    a.click();
   }
 
   // Static method to load a template
   static load(id) {
-    const data = fs.readFileSync(`./templates/${id}.json`);
-    return new Template(JSON.parse(data));
+    // Use Fetch API to read files
+    fetch(`./templates/${id}.json`)
+        .then(response => response.json())
+        .then(data => new Template(data));
   }
 
   // Method to export the template to a PDF
   exportToPDF(includeInstructions, includeNotes) {
-    const doc = new PDFDocument();
-    doc.pipe(fs.createWriteStream(`./exports/${this.name}.pdf`));
+    // Use jsPDF for creating PDFs in the browser
+    const doc = new jsPDF();
     this.shapes.forEach(shape => shape.draw(doc));
-    if (includeInstructions) doc.text(this.instructions);
-    if (includeNotes) doc.text(this.notes);
-    doc.end();
+    if (includeInstructions) doc.text(this.instructions, 10, 10);
+    if (includeNotes) doc.text(this.notes, 10, 20);
+    doc.save(`${this.name}.pdf`);
   }
 
   // Method to draw a shape in the template
@@ -57,7 +62,11 @@ class Template {
     if (includeMaterials) design.materials = this.materials;
     if (includeTools) design.tools = this.tools;
     if (includeCutList) design.cutList = this.cutList;
-    fs.writeFileSync(`./exports/${this.name}.json`, JSON.stringify(design));
+    // Use the download attribute of the anchor element to save files
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(design)], {type: 'application/json'}));
+    a.download = `${this.name}.json`;
+    a.click();
   }
 
   // Method to add stitch/punch patterns to the template
@@ -121,12 +130,16 @@ class Template {
 
   // Method to provide feedback for the template
   provideFeedback(feedback) {
-    fs.writeFileSync(`./feedback/${Date.now()}.txt`, feedback);
+    // Use the download attribute of the anchor element to save files
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([feedback], {type: 'text/plain'}));
+    a.download = `${Date.now()}.txt`;
+    a.click();
   }
 
 }
 
-module.exports = Template;
+// Removed module.exports as it is not recognized in a browser environment
 
 // This part of the code deals with UI interactions and uses the Template class
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -364,24 +377,24 @@ function provideFeedback(template, feedback) {
   template.provideFeedback(feedback);
 }
 
-module.exports = {
-  newTemplate,
-  startTutorial,
-  saveTemplate,
-  loadTemplate,
-  exportToPDF,
-  drawShape,
-  applyPatterns,
-  enableSnapToGrid,
-  exportDesign,
-  reset,
-  addStitchPunchPatterns,
-  selectPointCutPath,
-  addJoiningMarks,
-  estimateMaterials,
-  selectTools,
-  preview,
-  share,
-  customizeWorkspace,
-  provideFeedback
-}
+// Removed module.exports as it is not recognized in a browser environment
+// Ensured all functions are globally accessible
+window.newTemplate = newTemplate;
+window.startTutorial = startTutorial;
+window.saveTemplate = saveTemplate;
+window.loadTemplate = loadTemplate;
+window.exportToPDF = exportToPDF;
+window.drawShape = drawShape;
+window.applyPatterns = applyPatterns;
+window.enableSnapToGrid = enableSnapToGrid;
+window.exportDesign = exportDesign;
+window.reset = reset;
+window.addStitchPunchPatterns = addStitchPunchPatterns;
+window.selectPointCutPath = selectPointCutPath;
+window.addJoiningMarks = addJoiningMarks;
+window.estimateMaterials = estimateMaterials;
+window.selectTools = selectTools;
+window.preview = preview;
+window.share = share;
+window.customizeWorkspace = customizeWorkspace;
+window.provideFeedback = provideFeedback;
