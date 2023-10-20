@@ -10,12 +10,13 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 <script src="https://kit.fontawesome.com/0c7c2ebe72.js" crossorigin="anonymous"></script>
-<script type="text/javascript" src="main.js"></script>
 </head>
 <body>
+<!-- ... rest of the body content ... -->
+<script type="text/javascript" src="main.js"></script>
 
 <!-- The form is hidden initially -->
-<form id="templateCreationForm" style="display: none;">
+<form id="templateCreationForm" class="hidden">
     <label for="templateName">Template Name:</label>
     <input type="text" id="templateName" name="templateName" required>
 
@@ -40,22 +41,12 @@
         <div class="btn-group dropend w-100">
             <button class="btn btn-lg dropdown-toggle w-100 text-wrap" data-bs-toggle="dropdown" aria-expanded="false">Template Management</button>
             <div class="dropdown-menu">
-                <div id="newTemplate" title="Create a new template" class="btn btn-outline-primary w-100 my-1" onclick="createTemplate()">New Template</div>
+                <div id="newTemplate" title="Create a new template" class="btn btn-outline-primary w-100 my-1" onclick="createNewTemplate()">New Template</div>
                 <div id="saveTemplate" title="Save the current template" class="btn btn-outline-primary w-100 mb-1">Save Template</div>
                 <div id="loadTemplate" title="Load an existing template" class="btn btn-outline-primary w-100 mb-1">Load Template</div>
                 <div id="exportToPDF" title="Export the current template to PDF" class="btn btn-outline-primary w-100 mb-1">Export to PDF</div>
             </div>
         </div>
-        <!-- <div class=" dropdown">
-            <div class="btn btn-lg dropend">Template Management</div>
-            <div class="dropdown-menu">
-                <div id="newTemplate" title="Create a new template" class="btn btn-outline-primary w-100 my-1">New Template</div>
-                <div id="saveTemplate" title="Save the current template" class="btn btn-outline-primary w-100 mb-1">Save Template</div>
-                <div id="loadTemplate" title="Load an existing template" class="btn btn-outline-primary w-100 mb-1">Load Template</div>
-                <div id="exportToPDF" title="Export the current template to PDF" class="btn btn-outline-primary w-100 mb-1">Export to PDF</div>
-            </div>
-        </div> -->
-
         <div class="btn-group dropend w-100">
             <button class="btn dropdown-toggle w-100 text-wrap" data-bs-toggle="dropdown" aria-expanded="false">Design Tools</button>
             <div class="dropdown-menu">
@@ -65,16 +56,6 @@
                 <div id="exportDesignBtn" title="Export your current design" class="btn btn-outline-primary w-100 mb-1">Export Design</div>
             </div>
         </div>
-        <!-- <div class="dropdown">
-            <div class="btn dropbtn">Design Tools</div>
-            <div class="dropdown-content">
-                <div id="drawShapeBtn" title="Open the shape drawing tool" class="btn btn-outline-primary w-100 my-1">Draw Shape</div>
-                <div id="applyPatternsBtn" title="Apply selected patterns to the template" class="btn btn-outline-primary w-100 mb-1">Apply Patterns</div>
-                <div id="enableSnapToGridBtn" title="Enable the snap-to-grid functionality" class="btn btn-outline-primary w-100 mb-1">Enable Snap to Grid</div>
-                <div id="exportDesignBtn" title="Export your current design" class="btn btn-outline-primary w-100 mb-1">Export Design</div>
-            </div>
-        </div> -->
-
         <div class="btn-group dropend w-100">
             <button class="btn dropdown-toggle w-100 text-wrap" data-bs-toggle="dropdown" aria-expanded="false">Advanced Tools</button>
             <div class="dropdown-menu">
@@ -83,15 +64,6 @@
                 <div id="addJoiningMarks" title="Adds marks to indicate where printed pages are to be joined" class="btn btn-outline-primary w-100 mb-1">Add Joining Marks</div>
             </div>
         </div>
-        <!-- <div class="dropdown">
-            <div class="btn dropbtn">Advanced Tools</div>
-            <div class="dropdown-content">
-                <div id="stitchSelect" title="Select various stitch and punch patterns" class="btn btn-outline-primary w-100 my-1">Stitch Select</div>
-                <div id="pointSelect" title="Select points on a line for the stitch to follow" class="btn btn-outline-primary w-100 mb-1">Point Select</div>
-                <div id="addJoiningMarks" title="Adds marks to indicate where printed pages are to be joined" class="btn btn-outline-primary w-100 mb-1">Add Joining Marks</div>
-            </div>
-        </div> -->
-
         <div class="btn-group dropend w-100">
             <button class="btn dropdown-toggle w-100 text-wrap" data-bs-toggle="dropdown" aria-expanded="false">Miscellaneous</button>
             <div class="dropdown-menu">
@@ -99,13 +71,7 @@
                 <div id="reset" title="Reset all changes and start afresh" class="btn btn-outline-primary w-100 mb-1">Reset</div>
             </div>
         </div>
-        <!-- <div class="dropdown">
-            <div class="btn dropbtn">Miscellaneous</div>
-            <div class="dropdown-content">
-                <div id="startTutorial" title="Tutorial of basic functions" class="btn btn-outline-primary w-100 my-1">Tutorial</div>
-                <div id="reset" title="Reset all changes and start afresh" class="btn btn-outline-primary w-100 mb-1">Reset</div>
-            </div>
-        </div> -->
+        
     </div>
 
     <div class="main-content">
@@ -128,7 +94,7 @@
                         <input type="number" id="height" placeholder="Height" min="1" class="w-50 mx-1">
                     </div>
                     <div class="col-2 p-0 d-flex justify-content-start">
-                        <button id="calibrate" class="btn btn-sm d-inline" onclick="calibrate()">Calibrate</button>
+                        <button id="calibrate" class="btn btn-sm d-inline">Calibrate</button>
                     </div>
                 </div>
             </div>

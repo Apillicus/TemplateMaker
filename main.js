@@ -1,69 +1,88 @@
-//it says that require is not defined. 
-const Template = require('./template');
-const fs = require('fs');
-const PDFDocument = require('pdfkit');
+// Removed unnecessary comments
 
 class Template {
+  // Constructor for the Template class
   constructor(dimensions, units) {
-    this.dimensions = dimensions;
-    this.units = units;
-    this.shapes = [];
-    this.patterns = [];
-    this.gridSize = 0;
-    this.tools = [];
-    this.settings = {};
+    this.dimensions = dimensions; // Dimensions of the template
+    this.units = units; // Units for the dimensions
+    this.shapes = []; // Array to store shapes in the template
+    this.patterns = []; // Array to store patterns in the template
+    this.gridSize = 0; // Size of the grid for the template
+    this.tools = []; // Array to store tools used in the template
+    this.settings = {}; // Object to store settings for the template
   }
 
+  // Method to save the template
   save(name, details) {
-    fs.writeFileSync(`./templates/${name}.json`, JSON.stringify({ ...details, shapes: this.shapes, patterns: this.patterns, gridSize: this.gridSize, tools: this.tools, settings: this.settings }));
+    // Use the download attribute of the anchor element to save files
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([JSON.stringify({ ...details, shapes: this.shapes, patterns: this.patterns, gridSize: this.gridSize, tools: this.tools, settings: this.settings })], {type: 'application/json'}));
+    a.download = `${name}.json`;
+    a.click();
   }
 
+  // Static method to load a template
   static load(id) {
-    const data = fs.readFileSync(`./templates/${id}.json`);
-    return new Template(JSON.parse(data));
+    // Use Fetch API to read files
+    fetch(`./templates/${id}.json`)
+        .then(response => response.json())
+        .then(data => new Template(data));
   }
 
+  // Method to export the template to a PDF
   exportToPDF(includeInstructions, includeNotes) {
-    const doc = new PDFDocument();
-    doc.pipe(fs.createWriteStream(`./exports/${this.name}.pdf`));
+    // Use jsPDF for creating PDFs in the browser
+    const doc = new jsPDF();
     this.shapes.forEach(shape => shape.draw(doc));
-    if (includeInstructions) doc.text(this.instructions);
-    if (includeNotes) doc.text(this.notes);
-    doc.end();
+    if (includeInstructions) doc.text(this.instructions, 10, 10);
+    if (includeNotes) doc.text(this.notes, 10, 20);
+    doc.save(`${this.name}.pdf`);
   }
 
+  // Method to draw a shape in the template
   drawShape(shape, dimensions) {
     this.shapes.push({ shape, dimensions });
   }
 
+  // Method to apply a pattern to the template
   applyPattern(pattern) {
     this.patterns.push(pattern);
   }
 
+  // Method to enable snap to grid in the template
   enableSnapToGrid(gridSize) {
     this.gridSize = gridSize;
   }
 
+  // Method to export the design of the template
   exportDesign(includeMaterials, includeTools, includeCutList) {
     const design = { shapes: this.shapes, patterns: this.patterns };
     if (includeMaterials) design.materials = this.materials;
     if (includeTools) design.tools = this.tools;
     if (includeCutList) design.cutList = this.cutList;
-    fs.writeFileSync(`./exports/${this.name}.json`, JSON.stringify(design));
+    // Use the download attribute of the anchor element to save files
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(design)], {type: 'application/json'}));
+    a.download = `${this.name}.json`;
+    a.click();
   }
 
+  // Method to add stitch/punch patterns to the template
   addStitchPunchPatterns(pattern) {
     this.patterns.push(pattern);
   }
 
+  // Method to select points for the cut path in the template
   selectPointCutPath(points) {
     this.cutList = points;
   }
 
+  // Method to add joining marks to the template
   addJoiningMarks(marks) {
     this.joiningMarks = marks;
   }
 
+  // Method to estimate materials needed for the template
   estimateMaterials() {
     // Simple example: summing the areas of the shapes
     const totalArea = this.shapes.reduce((sum, { shape, dimensions }) => {
@@ -79,10 +98,12 @@ class Template {
     this.materials = { 'totalArea': totalArea };
   }
 
+  // Method to select tools for the template
   selectTools(tools) {
     this.tools = tools;
   }
 
+  // Method to preview the template
   preview() {
     // This method would typically be implemented on the client-side
     // Here's a pseudo-implementation
@@ -90,6 +111,7 @@ class Template {
   }
   
 
+  // Method to share the template with other users
   share(users) {
     // Pseudo-code, this heavily depends on your application's infrastructure
     users.forEach(user => {
@@ -99,39 +121,31 @@ class Template {
   }
   
 
+  // Method to customize the workspace for the template
   customizeWorkspace(settings) {
     this.settings = settings;
   }
 
+  // Method to provide feedback for the template
   provideFeedback(feedback) {
-    fs.writeFileSync(`./feedback/${Date.now()}.txt`, feedback);
+    // Use the download attribute of the anchor element to save files
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([feedback], {type: 'text/plain'}));
+    a.download = `${Date.now()}.txt`;
+    a.click();
   }
 
 }
 
-module.exports = Template;
+// Removed module.exports as it is not recognized in a browser environment
 
 // This part of the code deals with UI interactions and uses the Template class
 document.addEventListener('DOMContentLoaded', (event) => {
-  const Template = require('./template'); 
+  // Removed unnecessary require statement 
  
     let template; });
 
-    //This isn't working for some reason says its null
-  // document.getElementById('newTemplate').addEventListener('click', function() {
-  //   let width = document.getElementById('width');
-  //   let height = document.getElementById('height');
-
-  //   if(width !== null && width.value === ""){
-  //     //this is a check to see if they put a value in the width box.
-  //     //will enter this if statemtn should the width value not be entered, essentially error handling.
-  //     console.log('no value entered');
-  //   }
-
-  //   let dimensions = {width: document.getElementById('width').value, height: document.getElementById('height').value};
-  //   const units = document.getElementById('units').value;
-  //   template = newTemplate(dimensions, units); // create a new template when the button is clicked
-  // });
+// fixed a typo here and made the function globally accessable
 
 function createNewTemplate() {
     let width = document.getElementById('width');
@@ -160,13 +174,15 @@ function createNewTemplate() {
 
 // Function to create a new template
 function newTemplate(dimensions, units) {
-  let template = new Template(dimensions, units);
+  template = new Template(dimensions, units);
   return template;
 }
-document.getElementById('newTemplate').addEventListener('click', function() {
-  const dimensions = {width: document.getElementById('width').value, height: document.getElementById('height').value};
-  const units = document.getElementById('units').value;
-  newTemplate(dimensions, units);
+document.addEventListener('DOMContentLoaded', (event) => {
+  document.getElementById('newTemplate').addEventListener('click', function() {
+    const dimensions = {width: document.getElementById('width').value, height: document.getElementById('height').value};
+    const units = document.getElementById('units').value;
+    newTemplate(dimensions, units);
+  });
 });
 
 // Function to start an interactive tutorial
@@ -347,24 +363,24 @@ function provideFeedback(template, feedback) {
   template.provideFeedback(feedback);
 }
 
-module.exports = {
-  newTemplate,
-  startTutorial,
-  saveTemplate,
-  loadTemplate,
-  exportToPDF,
-  drawShape,
-  applyPatterns,
-  enableSnapToGrid,
-  exportDesign,
-  reset,
-  addStitchPunchPatterns,
-  selectPointCutPath,
-  addJoiningMarks,
-  estimateMaterials,
-  selectTools,
-  preview,
-  share,
-  customizeWorkspace,
-  provideFeedback
-}
+// Removed module.exports as it is not recognized in a browser environment
+// Ensured all functions are globally accessible
+window.newTemplate = newTemplate;
+window.startTutorial = startTutorial;
+window.saveTemplate = saveTemplate;
+window.loadTemplate = loadTemplate;
+window.exportToPDF = exportToPDF;
+window.drawShape = drawShape;
+window.applyPatterns = applyPatterns;
+window.enableSnapToGrid = enableSnapToGrid;
+window.exportDesign = exportDesign;
+window.reset = reset;
+window.addStitchPunchPatterns = addStitchPunchPatterns;
+window.selectPointCutPath = selectPointCutPath;
+window.addJoiningMarks = addJoiningMarks;
+window.estimateMaterials = estimateMaterials;
+window.selectTools = selectTools;
+window.preview = preview;
+window.share = share;
+window.customizeWorkspace = customizeWorkspace;
+window.provideFeedback = provideFeedback;
