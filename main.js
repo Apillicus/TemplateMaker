@@ -4,25 +4,29 @@ const fs = require('fs');
 const PDFDocument = require('pdfkit');
 
 class Template {
+  // Constructor for the Template class
   constructor(dimensions, units) {
-    this.dimensions = dimensions;
-    this.units = units;
-    this.shapes = [];
-    this.patterns = [];
-    this.gridSize = 0;
-    this.tools = [];
-    this.settings = {};
+    this.dimensions = dimensions; // Dimensions of the template
+    this.units = units; // Units for the dimensions
+    this.shapes = []; // Array to store shapes in the template
+    this.patterns = []; // Array to store patterns in the template
+    this.gridSize = 0; // Size of the grid for the template
+    this.tools = []; // Array to store tools used in the template
+    this.settings = {}; // Object to store settings for the template
   }
 
+  // Method to save the template
   save(name, details) {
     fs.writeFileSync(`./templates/${name}.json`, JSON.stringify({ ...details, shapes: this.shapes, patterns: this.patterns, gridSize: this.gridSize, tools: this.tools, settings: this.settings }));
   }
 
+  // Static method to load a template
   static load(id) {
     const data = fs.readFileSync(`./templates/${id}.json`);
     return new Template(JSON.parse(data));
   }
 
+  // Method to export the template to a PDF
   exportToPDF(includeInstructions, includeNotes) {
     const doc = new PDFDocument();
     doc.pipe(fs.createWriteStream(`./exports/${this.name}.pdf`));
@@ -32,18 +36,22 @@ class Template {
     doc.end();
   }
 
+  // Method to draw a shape in the template
   drawShape(shape, dimensions) {
     this.shapes.push({ shape, dimensions });
   }
 
+  // Method to apply a pattern to the template
   applyPattern(pattern) {
     this.patterns.push(pattern);
   }
 
+  // Method to enable snap to grid in the template
   enableSnapToGrid(gridSize) {
     this.gridSize = gridSize;
   }
 
+  // Method to export the design of the template
   exportDesign(includeMaterials, includeTools, includeCutList) {
     const design = { shapes: this.shapes, patterns: this.patterns };
     if (includeMaterials) design.materials = this.materials;
@@ -52,18 +60,22 @@ class Template {
     fs.writeFileSync(`./exports/${this.name}.json`, JSON.stringify(design));
   }
 
+  // Method to add stitch/punch patterns to the template
   addStitchPunchPatterns(pattern) {
     this.patterns.push(pattern);
   }
 
+  // Method to select points for the cut path in the template
   selectPointCutPath(points) {
     this.cutList = points;
   }
 
+  // Method to add joining marks to the template
   addJoiningMarks(marks) {
     this.joiningMarks = marks;
   }
 
+  // Method to estimate materials needed for the template
   estimateMaterials() {
     // Simple example: summing the areas of the shapes
     const totalArea = this.shapes.reduce((sum, { shape, dimensions }) => {
@@ -79,10 +91,12 @@ class Template {
     this.materials = { 'totalArea': totalArea };
   }
 
+  // Method to select tools for the template
   selectTools(tools) {
     this.tools = tools;
   }
 
+  // Method to preview the template
   preview() {
     // This method would typically be implemented on the client-side
     // Here's a pseudo-implementation
@@ -90,6 +104,7 @@ class Template {
   }
   
 
+  // Method to share the template with other users
   share(users) {
     // Pseudo-code, this heavily depends on your application's infrastructure
     users.forEach(user => {
@@ -99,10 +114,12 @@ class Template {
   }
   
 
+  // Method to customize the workspace for the template
   customizeWorkspace(settings) {
     this.settings = settings;
   }
 
+  // Method to provide feedback for the template
   provideFeedback(feedback) {
     fs.writeFileSync(`./feedback/${Date.now()}.txt`, feedback);
   }
