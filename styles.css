@@ -18,9 +18,7 @@ body {
   background-color: var(--color-main-bg);
 }
 /* Hidden form for new template creation */
-.hidden {
-  display: none;
-}
+// .hidden class is not used anywhere, so we remove this class
 
 .flex-column {
   display: flex;

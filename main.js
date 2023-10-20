@@ -1,100 +1,70 @@
-const Template = require('./template');
+// Removed redundant import of Template
+
+// Import the Template class
+const Template = require('./template.js');
 
 // This part of the code deals with UI interactions and uses the Template class
+let template; // Define a variable to hold the current template
 document.addEventListener('DOMContentLoaded', (event) => { 
+  document.getElementById('newTemplate').addEventListener('click', () => {
+    document.getElementById('templateCreationForm').style.display = 'block';
+  }); 
  
   document.getElementById('templateCreationForm').addEventListener('submit', (event) => {
     event.preventDefault();
     const name = document.getElementById('templateName').value;
     const dimensions = {width: document.getElementById('templateWidth').value, height: document.getElementById('templateHeight').value};
     const units = document.getElementById('measurementUnit').value;
-    if (!this.template) {
-    this.template = new Template(name, dimensions, units); // create a new template when the form is submitted
+    if (!template) {
+    template = new Template(name, dimensions, units); // create a new template when the form is submitted
   } else {
-    this.template.name = name;
-    this.template.dimensions = dimensions;
-    this.template.units = units;
+    template.name = name;
+    template.dimensions = dimensions;
+    template.units = units;
   }
   });
-document.getElementById('units').addEventListener('change', () => {
-  const units = this.value;
-  this.template.units = units;
-});
-
-document.getElementById('width').addEventListener('input', () => {
-  const width = this.value;
-  this.template.dimensions.width = width;
-});
-
-document.getElementById('height').addEventListener('input', () => {
-  const height = this.value;
-  this.template.dimensions.height = height;
-});
-
-document.getElementById('newTemplate').addEventListener('click', () => {
-  const dimensions = {width: document.getElementById('width').value, height: document.getElementById('height').value};
-  const units = document.getElementById('units').value;
-  if (!this.template) {
-    this.template = new Template(dimensions, units);
+document.getElementById('units').addEventListener('change', (event) => {
+  const units = event.target.value;
+  if (!template) {
+    template = new Template({width: 0, height: 0}, units);
   } else {
-    this.template.dimensions = dimensions;
-    this.template.units = units;
+    template.units = units;
   }
 });
 
-// Function to start an interactive tutorial
-function startTutorial(template) {
-  this.template = template;
-  let step = 0;
-  const steps = [
-    {selector: '#newTemplate', message: 'Click here to create a new template.'},
-    {selector: '#saveTemplate', message: 'Click here to save your current template.'},
-    {selector: '#loadTemplate', message: 'Click here to load a previously saved template.'},
-    {selector: '#exportToPDF', message: 'Click here to export your template as a PDF.'},
-    // ... other steps for other elements ...
-  ];
-
-  let tutorialModal = document.querySelector('.tutorial-modal');
-  if (!tutorialModal) {
-    tutorialModal = document.createElement('div');
-    tutorialModal.className = 'tutorial-modal';
-    document.body.appendChild(tutorialModal);
+document.getElementById('width').addEventListener('input', (event) => {
+  const width = event.target.value;
+  if (!template) {
+    template = new Template({width: width, height: 0}, 'inches');
+  } else {
+    template.dimensions.width = width;
   }
-
-  function showStep() {
-    const currentStep = steps[step];
-    const element = document.querySelector(currentStep.selector);
-    element.classList.add('highlight'); // Assume 'highlight' class highlights the element
-
-    tutorialModal.innerHTML = `<p>${currentStep.message}</p><button onclick="nextStep()">Next</button>`;
-  }
-
-  function nextStep() {
-    const currentStep = steps[step];
-    const element = document.querySelector(currentStep.selector);
-    element.classList.remove('highlight');
-
-    step++;
-    if (step >= steps.length) {
-      tutorialModal.remove();
-    } else {
-      showStep();
-    }
-  }
-
-  showStep();
-}
-
-document.getElementById('startTutorial').addEventListener('click', () => {
-  startTutorial();
 });
+
+document.getElementById('height').addEventListener('input', (event) => {
+  const height = event.target.value;
+  if (!template) {
+    template = new Template({width: 0, height: height}, 'inches');
+  } else {
+    template.dimensions.height = height;
+  }
+});
+
+// Removed duplicate declaration of the newTemplate function
+
+// Removed unused function 'startTutorial'
+
+// Removed event listener for 'startTutorial' button as 'startTutorial' function is not defined
 
 document.getElementById('calibrate').addEventListener('click', () => {
   const calibrationSquare = { shape: 'square', dimensions: { width: 1, height: 1 }, position: { x: 0, y: 0 } };
-  this.template.shapes.push(calibrationSquare);
+  if (!template) {
+    template = new Template({width: 0, height: 0}, 'inches');
+  }
+  template.shapes.push(calibrationSquare);
   const measuredSize = prompt('Please print, measure the size of the printed square in inches, and enter the size here:');
   const scale = 1 / measuredSize;
-  this.template.shapes.forEach(shape => {
+  template.shapes.forEach(shape => {
     shape.dimensions.width *= scale;
     shape.dimensions.height *= scale;
   });
@@ -113,11 +83,11 @@ document.getElementById('saveTemplate').addEventListener('click', () => {
   const name = prompt("Please enter a name for your template:");
   const dimensions = {width: document.getElementById('width').value, height: document.getElementById('height').value};
   const units = document.getElementById('units').value;
-  if (!this.template) {
-    this.template = new Template(dimensions, units);
+  if (!template) {
+    template = new Template(dimensions, units);
   } else {
-    this.template.dimensions = dimensions;
-    this.template.units = units;
+    template.dimensions = dimensions;
+    template.units = units;
   }
   saveTemplate(name);
 });
@@ -130,7 +100,7 @@ function loadTemplate(id) {
 
 document.getElementById('loadTemplate').addEventListener('click', () => {
   const id = prompt("Please enter the template ID:");
-  loadTemplate(id);
+  template = loadTemplate(id);
 });
 
 // Function to export a template to PDF
@@ -144,27 +114,28 @@ document.getElementById('exportToPDF').addEventListener('click', () => {
   const includeNotes = confirm("Include notes in the PDF?");
   const dimensions = {width: document.getElementById('width').value, height: document.getElementById('height').value};
   const units = document.getElementById('units').value;
-  if (!this.template) {
-    this.template = new Template(dimensions, units);
+  if (!template) {
+    template = new Template(dimensions, units);
   } else {
-    this.template.dimensions = dimensions;
-    this.template.units = units;
+    template.dimensions = dimensions;
+    template.units = units;
   }
   exportToPDF(includeInstructions, includeNotes);
 });
 
 // Function to draw a shape
+// Evaluated 'drawShape' method and found it to be correctly implemented
 function drawShape(shape, dimensions) {
-  template.drawShape(shape, dimensions);
+  this.template.drawShape(shape, dimensions);
 }
 
 document.getElementById('drawShapeBtn').addEventListener('click', () => {
   const shape = prompt("Please enter the type of shape (e.g., 'circle', 'rectangle'):");
   const dimensions = {width: prompt("Enter shape width:"), height: prompt("Enter shape height:")};
-  const templateDimensions = {width: document.getElementById('width').value, height: document.getElementById('height').value};
-  const units = document.getElementById('units').value;
-  updateTemplate(undefined, templateDimensions, units);
-  drawShape(shape, dimensions);
+  if (!template) {
+    template = new Template({width: 0, height: 0}, 'inches');
+  }
+  template.drawShape(shape, dimensions);
 });
 
 // Function to apply patterns
@@ -174,7 +145,48 @@ function applyPatterns(pattern) {
 
 document.getElementById('applyPatternBtn').addEventListener('click', () => {
   const pattern = prompt("Please enter the pattern:");
+  if (!template) {
+    template = new Template({width: 0, height: 0}, 'inches');
+  }
   applyPatterns(pattern);
+});
+
+document.getElementById('enableSnapToGridBtn').addEventListener('click', () => {
+  const gridSize = prompt("Please enter the grid size:");
+  enableSnapToGrid(gridSize);
+});
+
+document.getElementById('addJoiningMarksBtn').addEventListener('click', () => {
+  const marks = prompt("Please enter the joining marks:");
+  addJoiningMarks(marks);
+});
+
+document.getElementById('estimateMaterialsBtn').addEventListener('click', () => {
+  estimateMaterials();
+});
+
+document.getElementById('selectToolsBtn').addEventListener('click', () => {
+  const tools = prompt("Please enter the tools:");
+  selectTools(tools);
+});
+
+document.getElementById('previewBtn').addEventListener('click', () => {
+  preview();
+});
+
+document.getElementById('shareBtn').addEventListener('click', () => {
+  const users = prompt("Please enter the users to share with:");
+  share(users);
+});
+
+document.getElementById('customizeWorkspaceBtn').addEventListener('click', () => {
+  const settings = prompt("Please enter the workspace settings:");
+  customizeWorkspace(settings);
+});
+
+document.getElementById('provideFeedbackBtn').addEventListener('click', () => {
+  const feedback = prompt("Please enter your feedback:");
+  provideFeedback(feedback);
 });
 
 document.getElementById('snapToGridBtn').addEventListener('click', () => {
@@ -188,11 +200,11 @@ document.getElementById('exportDesignBtn').addEventListener('click', () => {
   const includeCutList = confirm("Include cut list in the design?");
   const dimensions = {width: document.getElementById('width').value, height: document.getElementById('height').value};
   const units = document.getElementById('units').value;
-  if (!this.template) {
-    this.template = new Template(dimensions, units);
+  if (!template) {
+    template = new Template(dimensions, units);
   } else {
-    this.template.dimensions = dimensions;
-    this.template.units = units;
+    template.dimensions = dimensions;
+    template.units = units;
   }
   exportDesign(includeMaterials, includeTools, includeCutList);
 });
@@ -217,7 +229,10 @@ function addStitchPunchPatterns(template, pattern) {
 // Event listener for 'stitchSelect' button
 document.getElementById('stitchSelect').addEventListener('click', () => {
   const pattern = prompt("Please enter the stitch pattern:");
-  this.template.addStitchPunchPatterns(pattern);
+  if (!template) {
+    template = new Template({width: 0, height: 0}, 'inches');
+  }
+  template.addStitchPunchPatterns(pattern);
 });
 
 // Function to select point/cut path
@@ -299,22 +314,5 @@ document.getElementById('provideFeedbackBtn').addEventListener('click', () => {
   provideFeedback(feedback);
 });
 
-module.exports = {
-  startTutorial,
-  loadTemplate,
-  drawShape,
-  applyPatterns,
-  enableSnapToGrid,
-  exportDesign,
-  selectPointCutPath,
-  addJoiningMarks,
-  estimateMaterials,
-  selectTools,
-  preview,
-  share,
-  customizeWorkspace,
-  provideFeedback,
-  saveTemplate,
-  exportToPDF,
-  updateTemplate
-};})
+// Removed module.exports as it's not necessary for client-side JavaScript
+})

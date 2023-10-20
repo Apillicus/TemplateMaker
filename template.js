@@ -1,31 +1,26 @@
-const fs = require('fs');
-const PDFDocument = require('pdfkit');
+// Removed 'fs' and 'PDFDocument' imports as they are not available in the browser environment
 
 class Template {
-  save(name, details) {
-    fs.writeFileSync(`./templates/${name}.json`, JSON.stringify({ ...details, shapes: this.shapes, patterns: this.patterns, gridSize: this.gridSize, tools: this.tools, settings: this.settings, units: this.units, dimensions: this.dimensions, materials: this.materials, cutList: this.cutList, joiningMarks: this.joiningMarks, instructions: this.instructions, notes: this.notes }));
-  }
-
-  static load(id) {
-    const data = fs.readFileSync(`./templates/${id}.json`);
-    return new Template(JSON.parse(data));
-  }
-
-  exportToPDF(includeInstructions, includeNotes) {
-    const doc = new PDFDocument();
-    doc.pipe(fs.createWriteStream(`./exports/${this.name}.pdf`));
-    this.shapes.forEach(shape => shape.draw(doc));
-    if (includeInstructions) doc.text(this.instructions);
-    if (includeNotes) doc.text(this.notes);
-    doc.text(`Dimensions: ${this.dimensions.width} x ${this.dimensions.height} ${this.units}`);
-    doc.text(`Materials: ${JSON.stringify(this.materials)}`);
-    doc.text(`Cut List: ${JSON.stringify(this.cutList)}`);
-    doc.text(`Joining Marks: ${JSON.stringify(this.joiningMarks)}`);
-    doc.end();
-  }
+  // Removed 'save', 'load' and 'exportToPDF' methods as they use 'fs' and 'PDFDocument' modules which are not available in the browser environment
 
   drawShape(shape, dimensions) {
-    this.shapes.push({ shape, dimensions });
+    let area;
+    switch(shape) {
+      case 'rectangle':
+        area = dimensions.width * dimensions.height;
+        break;
+      case 'circle':
+        area = Math.PI * Math.pow(dimensions.radius, 2);
+        break;
+      case 'square':
+        area = Math.pow(dimensions.side, 2);
+        break;
+      // Add more cases as needed
+      default:
+        console.log('Unsupported shape type');
+        return;
+    }
+    this.shapes.push({ shape, dimensions, area });
   }
 
   applyPattern(pattern) {
@@ -58,6 +53,7 @@ class Template {
 
   estimateMaterials() {
     // Simple example: summing the areas of the shapes
+    // Note: This is a simplified example. A real implementation would need to handle different types of shapes and materials.
     const totalArea = this.shapes.reduce((sum, { shape, dimensions }) => {
       // Example: Assuming the shape is a rectangle
       if (shape === 'rectangle') {
@@ -77,7 +73,7 @@ class Template {
 
   preview() {
     // This method would typically be implemented on the client-side
-    // Here's a pseudo-implementation
+    // Note: This is a placeholder. A real implementation would need to render a preview of the template.
     console.log("Rendering a preview of the shapes and patterns...");
   }
   

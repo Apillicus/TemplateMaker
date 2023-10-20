@@ -1,1 +1,4 @@
-C:/Users/chris/OneDrive/Documents/GitHub/TemplateMaker/main.js
+C:\Users\chris\OneDrive\Documents\GitHub\TemplateMaker\main.js
+C:\Users\chris\OneDrive\Documents\GitHub\TemplateMaker\template.js
+C:\Users\chris\OneDrive\Documents\GitHub\TemplateMaker\main.html
+C:\Users\chris\OneDrive\Documents\GitHub\TemplateMaker\styles.css
