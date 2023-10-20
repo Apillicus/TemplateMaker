@@ -147,21 +147,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
  
     let template; });
 
-    //This isn't working for some reason says its null
-  // document.getElementById('newTemplate').addEventListener('click', function() {
-  //   let width = document.getElementById('width');
-  //   let height = document.getElementById('height');
-
-  //   if(width !== null && width.value === ""){
-  //     //this is a check to see if they put a value in the width box.
-  //     //will enter this if statemtn should the width value not be entered, essentially error handling.
-  //     console.log('no value entered');
-  //   }
-
-  //   let dimensions = {width: document.getElementById('width').value, height: document.getElementById('height').value};
-  //   const units = document.getElementById('units').value;
-  //   template = newTemplate(dimensions, units); // create a new template when the button is clicked
-  // });
+// fixed a typo here and made the function globally accessable
 
 function createNewTemplate() {
     let width = document.getElementById('width');
@@ -190,7 +176,7 @@ function createNewTemplate() {
 
 // Function to create a new template
 function newTemplate(dimensions, units) {
-  let template = new Template(dimensions, units);
+  template = new Template(dimensions, units);
   return template;
 }
 document.getElementById('newTemplate').addEventListener('click', function() {
