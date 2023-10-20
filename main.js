@@ -1,6 +1,4 @@
-//it says that require is not defined. 
-// Removed unnecessary require statement
-// Removed require statements
+// Removed unnecessary comments
 
 class Template {
   // Constructor for the Template class
@@ -179,10 +177,12 @@ function newTemplate(dimensions, units) {
   template = new Template(dimensions, units);
   return template;
 }
-document.getElementById('newTemplate').addEventListener('click', function() {
-  const dimensions = {width: document.getElementById('width').value, height: document.getElementById('height').value};
-  const units = document.getElementById('units').value;
-  newTemplate(dimensions, units);
+document.addEventListener('DOMContentLoaded', (event) => {
+  document.getElementById('newTemplate').addEventListener('click', function() {
+    const dimensions = {width: document.getElementById('width').value, height: document.getElementById('height').value};
+    const units = document.getElementById('units').value;
+    newTemplate(dimensions, units);
+  });
 });
 
 // Function to start an interactive tutorial
