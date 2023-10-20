@@ -1,3 +1,4 @@
+//it says that require is not defined. 
 const Template = require('./template');
 const fs = require('fs');
 const PDFDocument = require('pdfkit');
@@ -114,13 +115,47 @@ module.exports = Template;
 document.addEventListener('DOMContentLoaded', (event) => {
   const Template = require('./template'); 
  
-  let template; 
+    let template; });
 
-  document.getElementById('newTemplate').addEventListener('click', function() {
-    const dimensions = {width: document.getElementById('width').value, height: document.getElementById('height').value};
+    //This isn't working for some reason says its null
+  // document.getElementById('newTemplate').addEventListener('click', function() {
+  //   let width = document.getElementById('width');
+  //   let height = document.getElementById('height');
+
+  //   if(width !== null && width.value === ""){
+  //     //this is a check to see if they put a value in the width box.
+  //     //will enter this if statemtn should the width value not be entered, essentially error handling.
+  //     console.log('no value entered');
+  //   }
+
+  //   let dimensions = {width: document.getElementById('width').value, height: document.getElementById('height').value};
+  //   const units = document.getElementById('units').value;
+  //   template = newTemplate(dimensions, units); // create a new template when the button is clicked
+  // });
+
+function createNewTemplate() {
+    let width = document.getElementById('width');
+    let height = document.getElementById('height');
+
+    if(width != null && width.value == ""){
+      //this is a check to see if they put a value in the width box.
+      //will enter this if statemtn should the width value not be entered, essentially error handling.
+      console.log('no value entered');
+      return;
+    }
+
+    if(height != null && height.value == ""){
+      //this is a check to see if they put a value in the width box.
+      //will enter this if statemtn should the width value not be entered, essentially error handling.
+      console.log('no value entered');
+      return;
+    }
+  
+
+    let dimensions = {width: document.getElementById('width').value, height: document.getElementById('height').value};
     const units = document.getElementById('units').value;
     template = newTemplate(dimensions, units); // create a new template when the button is clicked
-  });
+  };
 
 
 // Function to create a new template
@@ -177,9 +212,11 @@ document.getElementById('startTutorial').addEventListener('click', function() {
   startTutorial();
 });
 
-document.getElementById('calibrate').addEventListener('click', function() {
-  calibrate();
-});
+
+//this can be done with the onclick event that is default with buttons. if it were a div then we would do it this way.
+// document.getElementById('calibrate').addEventListener('click', function() {
+//   calibrate();
+// });
 
 // Function to add calibration square
 function calibrate() {
@@ -330,4 +367,4 @@ module.exports = {
   share,
   customizeWorkspace,
   provideFeedback
-};
+}
